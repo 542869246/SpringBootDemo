@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbootdemo.dao.BookInfoMapper">
+	<select id="findAll" resultType="BookInfo">
+		SELECT
+		book_info.book_id,
+		book_info.book_code,
+		book_info.book_name,
+		book_info.book_type,
+		book_info.book_atuthor,
+		book_info.publish_press,
+		book_info.publish_date,
+		book_info.is_borrow,
+		book_info.createdBy,
+		book_info.creation_time,
+		book_info.last_updatetime
+		FROM
+		book_info
+		where
+		1=1
+		<if test="book_type!=null">
+			and book_type=#{book_type}
+		</if>
+		<if test="book_name!=null">
+			and book_name like concat('%',#{book_name},'%')
+		</if>
+		<if test="is_borrow!=null">
+			and is_borrow=#{is_borrow}
+		</if>
+		order by
+		book_info.creation_time
+		limit #{form},#{pageSize}
+	</select>
+
+	<select id="findCount" resultType="int">
+		select count(*) from book_info where
+		1=1
+		<if test="book_type!=null">
+			and book_type=#{book_type}
+		</if>
+		<if test="book_name!=null">
+			and book_name like concat('%',#{book_name},'%')
+		</if>
+		<if test="is_borrow!=null">
+			and is_borrow=#{is_borrow}
+		</if>
+	</select>
+
+
+
+	<select id="findByUser" resultType="Users">
+		select * from users
+		where
+		user_code=#{user_code} and password=#{password}
+	</select>
+
+	<delete id="delById">
+		delete from book_info where book_id =#{id}
+	</delete>
+
+	<update id="update" parameterType="BookInfo">
+		update book_info set
+		book_info.book_code=#{book_code},
+		book_info.book_name=#{book_name},
+		book_info.book_type=#{book_type},
+		book_info.book_atuthor=#{book_atuthor},
+		book_info.publish_press=#{publish_press},
+		book_info.publish_date=#{publish_date},
+		book_info.is_borrow=#{is_borrow},
+		book_info.createdBy=#{createdBy},
+		book_info.creation_time=#{creation_time},
+		book_info.last_updatetime=#{last_updatetime}
+		where
+		book_id=#{book_id}
+	</update>
+
+	<!-- 增 -->
+	<insert id="add" parameterType="BookInfo">
+		insert into book_info(
+		book_code,
+		book_name,
+		book_type,
+		book_atuthor,
+		publish_press,
+		publish_date,
+		is_borrow,
+		createdBy,
+		creation_time,
+		last_updatetime
+		)
+		values(
+		#{book_code},
+		#{book_name},
+		#{book_type},
+		#{book_atuthor},
+		#{publish_press},
+		#{publish_date},
+		#{is_borrow},
+		#{createdBy},
+		#{creation_time},
+		#{last_updatetime}
+		)
+	</insert>
+
+</mapper>
